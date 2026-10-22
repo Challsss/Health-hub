@@ -5,8 +5,8 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Clean, bold burnt-orange heart centered in the adaptive icon safe zone -->
+    <!-- Clean, bold Nord Frost (#88C0D0) heart centered in the adaptive icon safe zone -->
     <path
-        android:fillColor="#F97316"
+        android:fillColor="#88C0D0"
         android:pathData="M54,76 C54,76 30,60 30,43.5 C30,35.5 36.2,29.5 43.8,29.5 C48.2,29.5 52.1,31.7 54,35.2 C55.9,31.7 59.8,29.5 64.2,29.5 C71.8,29.5 78,35.5 78,43.5 C78,60 54,76 54,76 Z" />
 </vector>

@@ -4,18 +4,18 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Deep espresso brown base -->
+    <!-- Nord Polar Night (nord0) base -->
     <path
-        android:fillColor="#140E0A"
+        android:fillColor="#2E3440"
         android:pathData="M0,0h108v108h-108z" />
-    <!-- Warm roasted walnut inner glow circle -->
+    <!-- Nord Polar Night (nord1) inner circle -->
     <path
-        android:fillColor="#241811"
+        android:fillColor="#3B4252"
         android:pathData="M54,14 A40,40 0 1,1 53.9,14 Z" />
-    <!-- Subtle burnt-orange accent ring -->
+    <!-- Subtle Nord Polar Night (nord3) ring -->
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#523826"
+        android:strokeColor="#4C566A"
         android:strokeWidth="2.2"
         android:pathData="M54,18 A36,36 0 1,1 53.9,18 Z" />
 </vector>

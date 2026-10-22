@@ -47,14 +47,14 @@ class PermissionsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = Color.parseColor("#140E0A")
-        window.navigationBarColor = Color.parseColor("#140E0A")
+        window.statusBarColor = Color.parseColor("#2E3440")
+        window.navigationBarColor = Color.parseColor("#2E3440")
 
         val density = resources.displayMetrics.density
         fun dp(v: Int): Int = (v * density).toInt()
 
         val rootScroll = ScrollView(this).apply {
-            setBackgroundColor(Color.parseColor("#140E0A"))
+            setBackgroundColor(Color.parseColor("#2E3440"))
             isFillViewport = true
         }
 
@@ -66,18 +66,18 @@ class PermissionsActivity : ComponentActivity() {
         val title = TextView(this).apply {
             text = "Permissions & Health Connect"
             textSize = 22f
-            setTextColor(Color.parseColor("#FCF3EA"))
+            setTextColor(Color.parseColor("#ECEFF4"))
             setPadding(0, 0, 0, dp(12))
         }
 
         statusView = TextView(this).apply {
             textSize = 15f
-            setTextColor(Color.parseColor("#F97316"))
+            setTextColor(Color.parseColor("#88C0D0"))
             setPadding(dp(16), dp(16), dp(16), dp(16))
             background = GradientDrawable().apply {
-                setColor(Color.parseColor("#221812"))
+                setColor(Color.parseColor("#3B4252"))
                 cornerRadius = dp(16).toFloat()
-                setStroke(dp(1), Color.parseColor("#523826"))
+                setStroke(dp(1), Color.parseColor("#4C566A"))
             }
         }
 
@@ -88,7 +88,7 @@ class PermissionsActivity : ComponentActivity() {
                 • All data stays 100% locally on your phone.
             """.trimIndent()
             textSize = 14f
-            setTextColor(Color.parseColor("#BC9C82"))
+            setTextColor(Color.parseColor("#D8DEE9"))
             setPadding(0, dp(16), 0, dp(24))
         }
 
@@ -101,7 +101,7 @@ class PermissionsActivity : ComponentActivity() {
                 background = GradientDrawable().apply {
                     setColor(Color.parseColor(bgHex))
                     cornerRadius = dp(14).toFloat()
-                    setStroke(dp(1), Color.parseColor("#523826"))
+                    setStroke(dp(1), Color.parseColor("#4C566A"))
                 }
                 val lp = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -118,32 +118,32 @@ class PermissionsActivity : ComponentActivity() {
 
         val btnRequest = styledButton(
             "Request Missing Permissions",
-            "#F97316",
-            "#140E0A"
+            "#88C0D0",
+            "#2E3440"
         ) {
             requestAll()
         }
 
         val btnHealthConnect = styledButton(
             "Manage Health Connect Permissions",
-            "#322319",
-            "#FCF3EA"
+            "#434C5E",
+            "#ECEFF4"
         ) {
             openHealthConnectSettings()
         }
 
         val btnAppSettings = styledButton(
             "Open Android App Permissions",
-            "#322319",
-            "#FCF3EA"
+            "#434C5E",
+            "#ECEFF4"
         ) {
             openAppSettings()
         }
 
         val btnDone = styledButton(
             "← Back to Health Hub",
-            "#221812",
-            "#F97316"
+            "#3B4252",
+            "#88C0D0"
         ) {
             finish()
         }

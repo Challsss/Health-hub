@@ -113,16 +113,16 @@ internal object WidgetUpdater {
 
         views.setTextViewText(R.id.widget_title, "♥ STEPS & HEART")
         views.setTextViewText(R.id.widget_left_label, "DAILY STEPS")
-        views.setTextViewText(R.id.widget_right_label, "HEART & RECOVERY")
+        views.setTextViewText(R.id.widget_right_label, "RESTING HR")
 
         val root = loadStore(context)
         val daysObj = root?.optJSONObject("days")
         if (daysObj == null) {
-            views.setTextViewText(R.id.widget_updated, "Tap to open")
-            views.setTextViewText(R.id.widget_left_main, "– steps")
-            views.setTextViewText(R.id.widget_left_sub, "– km • – kcal")
-            views.setTextViewText(R.id.widget_right_main, "RHR –")
-            views.setTextViewText(R.id.widget_right_sub, "HRV – • Ex –")
+            views.setTextViewText(R.id.widget_updated, "Tap to sync")
+            views.setTextViewText(R.id.widget_left_main, "0")
+            views.setTextViewText(R.id.widget_left_sub, "0.0 km • 0 kcal")
+            views.setTextViewText(R.id.widget_right_main, "– bpm")
+            views.setTextViewText(R.id.widget_right_sub, "HRV – • Ex 0m")
             mgr.updateAppWidget(widgetId, views)
             return
         }
@@ -135,24 +135,24 @@ internal object WidgetUpdater {
         } ?: keys.lastOrNull()
 
         if (bestKey == null) {
-            views.setTextViewText(R.id.widget_updated, "Tap to open")
-            views.setTextViewText(R.id.widget_left_main, "– steps")
-            views.setTextViewText(R.id.widget_left_sub, "– km • – kcal")
-            views.setTextViewText(R.id.widget_right_main, "RHR –")
-            views.setTextViewText(R.id.widget_right_sub, "HRV – • Ex –")
+            views.setTextViewText(R.id.widget_updated, "Tap to sync")
+            views.setTextViewText(R.id.widget_left_main, "0")
+            views.setTextViewText(R.id.widget_left_sub, "0.0 km • 0 kcal")
+            views.setTextViewText(R.id.widget_right_main, "– bpm")
+            views.setTextViewText(R.id.widget_right_sub, "HRV – • Ex 0m")
         } else {
             val d = daysObj.optJSONObject(bestKey)
             val steps = if (d != null && !d.isNull("steps")) {
-                "${nf.format(d.optLong("steps", 0L))} steps"
-            } else "0 steps"
+                nf.format(d.optLong("steps", 0L))
+            } else "0"
 
             val distKm = if (d != null && !d.isNull("distance_m")) {
                 String.format(Locale.US, "%.1f km", d.optDouble("distance_m", 0.0) / 1000.0)
-            } else "– km"
+            } else "0.0 km"
 
             val kcal = if (d != null && !d.isNull("active_kcal")) {
                 String.format(Locale.US, "%.0f kcal", d.optDouble("active_kcal", 0.0))
-            } else "– kcal"
+            } else "0 kcal"
 
             // Search most recent day with resting_hr / hrv if today doesn't have it yet
             var rhrVal: Double? = null
@@ -170,7 +170,7 @@ internal object WidgetUpdater {
                 if (rhrVal != null && hrvVal != null) break
             }
 
-            val rhrMain = rhrVal?.let { String.format(Locale.US, "RHR %.0f bpm", it) } ?: "RHR –"
+            val rhrMain = rhrVal?.let { String.format(Locale.US, "%.0f bpm", it) } ?: "– bpm"
             val hrvStr = hrvVal?.let { String.format(Locale.US, "HRV %.0f ms", it) } ?: "HRV –"
             val exStr = if (d != null && !d.isNull("exercise_min")) {
                 String.format(Locale.US, "Ex %.0fm", d.optDouble("exercise_min", 0.0))
@@ -195,16 +195,16 @@ internal object WidgetUpdater {
 
         views.setTextViewText(R.id.widget_title, "🌙 SLEEP & RECOVERY")
         views.setTextViewText(R.id.widget_left_label, "TIME ASLEEP")
-        views.setTextViewText(R.id.widget_right_label, "SLEEP STAGES")
+        views.setTextViewText(R.id.widget_right_label, "DEEP SLEEP")
 
         val root = loadStore(context)
         val sleepArr = root?.optJSONArray("sleep")
         if (sleepArr == null || sleepArr.length() == 0) {
-            views.setTextViewText(R.id.widget_updated, "Tap to open")
-            views.setTextViewText(R.id.widget_left_main, "No sleep data")
+            views.setTextViewText(R.id.widget_updated, "Tap to sync")
+            views.setTextViewText(R.id.widget_left_main, "–h –m")
             views.setTextViewText(R.id.widget_left_sub, "Bedtime –")
-            views.setTextViewText(R.id.widget_right_main, "Deep – • REM –")
-            views.setTextViewText(R.id.widget_right_sub, "Light – • Awake –")
+            views.setTextViewText(R.id.widget_right_main, "– min")
+            views.setTextViewText(R.id.widget_right_sub, "REM – • Light –")
             mgr.updateAppWidget(widgetId, views)
             return
         }
@@ -256,17 +256,19 @@ internal object WidgetUpdater {
                 inBedMin.toInt() / 60,
                 inBedMin.toInt() % 60
             )
+            val deepHero = if (deepMin >= 60.0) {
+                String.format(Locale.US, "%dh %02dm", deepMin.toInt() / 60, deepMin.toInt() % 60)
+            } else {
+                String.format(Locale.US, "%.0f min", deepMin)
+            }
 
             views.setTextViewText(R.id.widget_updated, dateStr)
             views.setTextViewText(R.id.widget_left_main, asleepStr)
-            views.setTextViewText(R.id.widget_left_sub, "Bed $bedClock • In bed $inBedStr")
-            views.setTextViewText(
-                R.id.widget_right_main,
-                String.format(Locale.US, "Deep %.0fm • REM %.0fm", deepMin, remMin)
-            )
+            views.setTextViewText(R.id.widget_left_sub, "Bed $bedClock • Tot $inBedStr")
+            views.setTextViewText(R.id.widget_right_main, deepHero)
             views.setTextViewText(
                 R.id.widget_right_sub,
-                String.format(Locale.US, "Light %.0fm • Awake %.0fm", lightMin, awakeMin)
+                String.format(Locale.US, "REM %.0fm • Light %.0fm", remMin, lightMin)
             )
         }
 
@@ -281,16 +283,16 @@ internal object WidgetUpdater {
         attachLaunchIntent(context, views, 103)
 
         views.setTextViewText(R.id.widget_title, "⚖ XIAOMI SCALE S400")
-        views.setTextViewText(R.id.widget_left_label, "WEIGHT & FAT")
-        views.setTextViewText(R.id.widget_right_label, "BODY COMPOSITION")
+        views.setTextViewText(R.id.widget_left_label, "WEIGHT")
+        views.setTextViewText(R.id.widget_right_label, "BODY FAT")
 
         val root = loadStore(context)
         val scaleArr = root?.optJSONArray("scale")
         if (scaleArr == null || scaleArr.length() == 0) {
             views.setTextViewText(R.id.widget_updated, "Tap to scan")
             views.setTextViewText(R.id.widget_left_main, "– kg")
-            views.setTextViewText(R.id.widget_left_sub, "Fat –% • BMI –")
-            views.setTextViewText(R.id.widget_right_main, "Muscle – kg")
+            views.setTextViewText(R.id.widget_left_sub, "BMI – • Muscle –")
+            views.setTextViewText(R.id.widget_right_main, "– %")
             views.setTextViewText(R.id.widget_right_sub, "Visceral – • Water –%")
             mgr.updateAppWidget(widgetId, views)
             return
@@ -301,7 +303,7 @@ internal object WidgetUpdater {
             val w = mObj.optDouble("weight_kg", 0.0).toFloat()
             val timeMs = mObj.optLong("time_ms", 0L)
             val dateStr = if (timeMs > 0L) {
-                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US).format(Date(timeMs))
+                SimpleDateFormat("MMM d, HH:mm", Locale.US).format(Date(timeMs))
             } else "Latest"
 
             val profile = root.optJSONObject("profile")
@@ -366,11 +368,11 @@ internal object WidgetUpdater {
 
                 views.setTextViewText(
                     R.id.widget_left_sub,
-                    String.format(Locale.US, "%.1f%% fat • BMI %.1f", bf, bmi)
+                    String.format(Locale.US, "BMI %.1f • Muscle %.1f kg", bmi, muscle)
                 )
                 views.setTextViewText(
                     R.id.widget_right_main,
-                    String.format(Locale.US, "Muscle %.1f kg", muscle)
+                    String.format(Locale.US, "%.1f %%", bf)
                 )
                 views.setTextViewText(
                     R.id.widget_right_sub,
@@ -381,7 +383,7 @@ internal object WidgetUpdater {
                     R.id.widget_left_sub,
                     String.format(Locale.US, "BMI %.1f", bmi)
                 )
-                views.setTextViewText(R.id.widget_right_main, "Weight only")
+                views.setTextViewText(R.id.widget_right_main, "– %")
                 views.setTextViewText(R.id.widget_right_sub, "Step barefoot for BIA")
             }
         }

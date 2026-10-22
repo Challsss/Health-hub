@@ -22,7 +22,7 @@ use crate::reports::{self, Period, Report, Severity};
 use crate::store::Store;
 
 // ---------------------------------------------------------------------------
-// Palette & visual tokens (Warm Brown-to-Orange Modern Theme)
+// Palette & visual tokens (Nord Theme: Polar Night, Snow Storm & Frost)
 // ---------------------------------------------------------------------------
 
 #[allow(dead_code)]
@@ -59,6 +59,8 @@ struct Palette {
     text: Color32,
     muted: Color32,
     primary: Color32,
+    frost_teal: Color32,
+    frost_deep: Color32,
     good: Color32,
     warn: Color32,
     alert: Color32,
@@ -66,37 +68,41 @@ struct Palette {
 }
 
 impl Palette {
-    /// Warm espresso-brown to burnt-orange dark theme with distinct semantic insight colors.
+    /// Nord Dark Theme: Polar Night (nord0–nord3), Snow Storm (nord4–nord6), and Frost (nord7–nord10).
     fn dark() -> Self {
         Self {
-            bg: Color32::from_rgb(20, 14, 10),          // Deep espresso brown
-            surface: Color32::from_rgb(34, 24, 18),     // Rich roasted walnut card
-            surface_alt: Color32::from_rgb(50, 35, 25), // Warm cocoa surface
-            border: Color32::from_rgb(82, 56, 38),      // Bronze / umber border
-            text: Color32::from_rgb(252, 243, 234),     // Warm ivory cream
-            muted: Color32::from_rgb(188, 156, 130),    // Sandy caramel muted text
-            primary: Color32::from_rgb(249, 115, 22),   // Vibrant burnt orange
-            good: Color32::from_rgb(52, 211, 153),      // Emerald green (Good insight)
-            warn: Color32::from_rgb(251, 191, 36),      // Amber gold (Warning insight)
-            alert: Color32::from_rgb(248, 113, 113),    // Coral red (Alert insight)
-            info: Color32::from_rgb(96, 165, 250),      // Sky blue (Info insight)
+            bg: Color32::from_rgb(46, 52, 64),            // nord0 (#2E3440) Polar Night background
+            surface: Color32::from_rgb(59, 66, 82),       // nord1 (#3B4252) Polar Night elevated card
+            surface_alt: Color32::from_rgb(67, 76, 94),   // nord2 (#434C5E) Polar Night inner surface
+            border: Color32::from_rgb(76, 86, 106),       // nord3 (#4C566A) Polar Night border
+            text: Color32::from_rgb(236, 239, 244),       // nord6 (#ECEFF4) Snow Storm primary text
+            muted: Color32::from_rgb(216, 222, 233),      // nord4 (#D8DEE9) Snow Storm secondary text
+            primary: Color32::from_rgb(136, 192, 208),    // nord8 (#88C0D0) Frost pure ice cyan
+            frost_teal: Color32::from_rgb(143, 188, 187), // nord7 (#8FBCBB) Frost polar teal
+            frost_deep: Color32::from_rgb(94, 129, 172),  // nord10 (#5E81AC) Frost deep arctic blue
+            good: Color32::from_rgb(163, 190, 140),       // nord14 (#A3BE8C) Aurora green
+            warn: Color32::from_rgb(235, 203, 139),       // nord13 (#EBCB8B) Aurora yellow
+            alert: Color32::from_rgb(191, 97, 106),       // nord11 (#BF616A) Aurora red
+            info: Color32::from_rgb(129, 161, 193),       // nord9 (#81A1C1) Frost steel blue
         }
     }
 
-    /// Warm latte-cream to burnt-orange light theme with distinct semantic insight colors.
+    /// Nord Light Theme: Snow Storm (nord4–nord6) surfaces, Polar Night (nord0–nord3) text, Frost accents.
     fn light() -> Self {
         Self {
-            bg: Color32::from_rgb(248, 240, 230),          // Warm sand / latte
-            surface: Color32::from_rgb(255, 250, 244),     // Soft ivory card
-            surface_alt: Color32::from_rgb(238, 224, 208), // Warm almond
-            border: Color32::from_rgb(214, 190, 166),      // Light bronze border
-            text: Color32::from_rgb(44, 27, 16),           // Deep espresso text
-            muted: Color32::from_rgb(128, 94, 68),         // Roasted coffee muted
-            primary: Color32::from_rgb(234, 88, 12),       // Deep burnt orange
-            good: Color32::from_rgb(22, 163, 74),          // Forest green (Good insight)
-            warn: Color32::from_rgb(217, 119, 6),          // Rich amber (Warning insight)
-            alert: Color32::from_rgb(220, 38, 38),         // Crimson red (Alert insight)
-            info: Color32::from_rgb(37, 99, 235),          // Royal blue (Info insight)
+            bg: Color32::from_rgb(236, 239, 244),         // nord6 (#ECEFF4) Snow Storm background
+            surface: Color32::from_rgb(229, 233, 240),    // nord5 (#E5E9F0) Snow Storm card
+            surface_alt: Color32::from_rgb(216, 222, 233),// nord4 (#D8DEE9) Snow Storm inner surface
+            border: Color32::from_rgb(184, 194, 210),     // Snow Storm / Polar Night border
+            text: Color32::from_rgb(46, 52, 64),          // nord0 (#2E3440) Polar Night primary text
+            muted: Color32::from_rgb(76, 86, 106),        // nord3 (#4C566A) Polar Night muted text
+            primary: Color32::from_rgb(94, 129, 172),     // nord10 (#5E81AC) Frost deep ocean blue
+            frost_teal: Color32::from_rgb(94, 156, 155),  // Frost teal darkened for Snow Storm
+            frost_deep: Color32::from_rgb(76, 106, 146),  // Deep frost for Snow Storm
+            good: Color32::from_rgb(104, 142, 78),        // Aurora green for light mode
+            warn: Color32::from_rgb(180, 130, 50),        // Aurora amber for light mode
+            alert: Color32::from_rgb(175, 70, 80),        // Aurora red for light mode
+            info: Color32::from_rgb(94, 129, 172),        // nord10 (#5E81AC) Frost blue
         }
     }
 
@@ -151,11 +157,11 @@ impl Palette {
         let painter = ui.painter();
         painter.rect_filled(rect, Rounding::same(7.0), self.surface_alt);
 
-        // Warm brown-to-orange sleep stage palette:
-        let col_deep = Color32::from_rgb(194, 65, 12);   // Deep: Rich Copper / Rust
-        let col_rem = Color32::from_rgb(249, 115, 22);   // REM: Vibrant Burnt Orange
-        let col_light = Color32::from_rgb(251, 191, 36); // Light: Warm Amber Gold
-        let col_awake = Color32::from_rgb(156, 118, 90); // Awake: Soft Mocha Brown
+        // Nord Frost + Snow Storm sleep stage palette:
+        let col_deep = self.frost_deep;  // Deep: nord10 (#5E81AC) Deep Frost Blue
+        let col_rem = self.primary;      // REM: nord8 (#88C0D0) Bright Frost Ice Cyan
+        let col_light = self.frost_teal; // Light: nord7 (#8FBCBB) Frost Polar Teal
+        let col_awake = self.muted;      // Awake: nord4 (#D8DEE9) Snow Storm
 
         let segments = [
             (b.deep_min, col_deep),
@@ -1615,12 +1621,12 @@ impl HealthHubApp {
                     let base_col = if s >= 10_000.0 {
                         p.primary
                     } else if s >= 7_500.0 {
-                        p.good
+                        p.frost_teal
                     } else {
-                        p.muted.gamma_multiply(0.75)
+                        p.frost_deep
                     };
                     let col = if is_sel {
-                        p.warn
+                        p.text
                     } else {
                         base_col
                     };
@@ -1739,7 +1745,7 @@ impl HealthHubApp {
                     .collect();
 
                 let line_col = if self.heart_show_hrv {
-                    p.good
+                    p.frost_teal
                 } else {
                     p.primary
                 };
@@ -1767,13 +1773,13 @@ impl HealthHubApp {
                         );
                         plot_ui.vline(
                             VLine::new(sel_heart as f64)
-                                .color(p.warn.gamma_multiply(0.6))
+                                .color(p.text.gamma_multiply(0.6))
                                 .width(1.5_f32),
                         );
                         if !sel_pt.is_empty() {
                             plot_ui.points(
                                 Points::new(PlotPoints::from(sel_pt))
-                                    .color(p.warn)
+                                    .color(p.text)
                                     .radius(6.0_f32),
                             );
                         }
@@ -1903,11 +1909,11 @@ impl HealthHubApp {
                     let base_col = if (7.0..=9.0).contains(&hrs) {
                         p.primary
                     } else if hrs >= 6.0 {
-                        p.good
+                        p.frost_teal
                     } else {
-                        p.muted.gamma_multiply(0.75)
+                        p.frost_deep
                     };
-                    let col = if is_sel { p.warn } else { base_col };
+                    let col = if is_sel { p.text } else { base_col };
                     Bar::new(i as f64, hrs).width(0.62).fill(col)
                 })
                 .collect();
@@ -2138,7 +2144,7 @@ impl HealthHubApp {
                     .collect();
 
                 let line_col = if self.body_show_bf {
-                    p.good
+                    p.frost_teal
                 } else {
                     p.primary
                 };
@@ -2162,17 +2168,17 @@ impl HealthHubApp {
                         plot_ui.points(
                             Points::new(PlotPoints::from(pts_vec))
                                 .color(line_col)
-                                .radius(4.0_f32),
+                                 .radius(4.0_f32),
                         );
                         plot_ui.vline(
                             VLine::new(sel_body as f64)
-                                .color(p.warn.gamma_multiply(0.6))
+                                .color(p.text.gamma_multiply(0.6))
                                 .width(1.5_f32),
                         );
                         if !sel_pt.is_empty() {
                             plot_ui.points(
                                 Points::new(PlotPoints::from(sel_pt))
-                                    .color(p.warn)
+                                    .color(p.text)
                                     .radius(6.5_f32),
                             );
                         }
