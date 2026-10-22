@@ -8,98 +8,57 @@
     android:orientation="horizontal"
     android:padding="12dp">
 
-    <!-- Left Card (Metric + Graphic) -->
+    <!-- Left Card -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginEnd="6dp"
         android:layout_weight="1"
         android:background="@drawable/widget_panel_bg"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingStart="15dp"
+        android:paddingStart="16dp"
         android:paddingTop="12dp"
-        android:paddingEnd="15dp"
+        android:paddingEnd="16dp"
         android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/widget_left_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.05"
+            android:maxLines="1"
+            android:text="STEPS"
+            android:textColor="#81A1C1"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/widget_left_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="22sp"
-            android:autoSizeMinTextSize="15sp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="17sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
             android:ellipsize="end"
+            android:gravity="center_vertical"
             android:includeFontPadding="false"
             android:maxLines="1"
             android:text="–"
             android:textColor="#ECEFF4"
-            android:textSize="21sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/widget_left_sub"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:autoSizeMaxTextSize="12.5sp"
-            android:autoSizeMinTextSize="10sp"
-            android:autoSizeStepGranularity="0.5sp"
-            android:autoSizeTextType="uniform"
-            android:ellipsize="end"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:text="–"
-            android:textColor="#88C0D0"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/widget_left_chart"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:contentDescription="@null"
-            android:scaleType="fitXY" />
-    </LinearLayout>
-
-    <!-- Right Card (Metric + Graphic) -->
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="6dp"
-        android:layout_weight="1"
-        android:background="@drawable/widget_panel_bg"
-        android:orientation="vertical"
-        android:paddingStart="15dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="15dp"
-        android:paddingBottom="12dp">
-
-        <TextView
-            android:id="@+id/widget_right_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="22sp"
-            android:autoSizeMinTextSize="15sp"
-            android:autoSizeStepGranularity="1sp"
-            android:autoSizeTextType="uniform"
-            android:ellipsize="end"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:text="–"
-            android:textColor="#88C0D0"
-            android:textSize="21sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/widget_right_sub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:autoSizeMaxTextSize="12.5sp"
-            android:autoSizeMinTextSize="10sp"
+            android:autoSizeMaxTextSize="13sp"
+            android:autoSizeMinTextSize="10.5sp"
             android:autoSizeStepGranularity="0.5sp"
             android:autoSizeTextType="uniform"
             android:ellipsize="end"
@@ -107,15 +66,84 @@
             android:maxLines="1"
             android:text="–"
             android:textColor="#D8DEE9"
-            android:textSize="12sp"
+            android:textSize="12.5sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/widget_left_chart"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY" />
+    </LinearLayout>
+
+    <!-- Right Card -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="6dp"
+        android:layout_weight="1"
+        android:background="@drawable/widget_panel_bg"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/widget_right_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.05"
+            android:maxLines="1"
+            android:text="RESTING HR"
+            android:textColor="#81A1C1"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/widget_right_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="17sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="–"
+            android:textColor="#88C0D0"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/widget_right_sub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="13sp"
+            android:autoSizeMinTextSize="10.5sp"
+            android:autoSizeStepGranularity="0.5sp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="–"
+            android:textColor="#D8DEE9"
+            android:textSize="12.5sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/widget_right_chart"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="18dp"
             android:layout_marginTop="8dp"
-            android:layout_weight="1"
             android:contentDescription="@null"
             android:scaleType="fitXY" />
     </LinearLayout>
