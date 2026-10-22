@@ -1,0 +1,42 @@
+# Rust build artifacts
+/target/
+**/*.rs.bk
+
+# Android / Gradle / Kotlin build artifacts
+/android/.gradle/
+/android/.kotlin/
+/android/.idea/
+/android/build/
+/android/app/build/
+/android/app/debug/
+/android/app/release/
+/android/app/src/main/jniLibs/
+/android/local.properties
+local.properties
+.gradle/
+.kotlin/
+
+# Compiled binaries, packages & signing keys
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+*.so
+*.keystore
+*.jks
+*.idsig
+
+# Local user data, health stores & secrets (never commit personal data or BLE keys)
+health_hub_store.json
+*bindkey*
+.env
+.env.*
+
+# Editor & OS metadata
+.idea/
+.vscode/
+*.iml
+*.swp
+.DS_Store
+Thumbs.db
