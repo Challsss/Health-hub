@@ -49,10 +49,19 @@ pub enum Severity {
 impl Severity {
     pub fn icon(self) -> &'static str {
         match self {
-            Severity::Good => "✔",
-            Severity::Info => "ℹ",
-            Severity::Warning => "⚠",
-            Severity::Alert => "‼",
+            Severity::Good => "[OK]",
+            Severity::Info => "[INFO]",
+            Severity::Warning => "[WARN]",
+            Severity::Alert => "[ALERT]",
+        }
+    }
+
+    pub fn badge_label(self) -> &'static str {
+        match self {
+            Severity::Good => "GOOD",
+            Severity::Info => "INFO",
+            Severity::Warning => "WARNING",
+            Severity::Alert => "ALERT",
         }
     }
 }
@@ -464,7 +473,7 @@ pub fn build_report(store: &Store, period: Period, today: NaiveDate) -> Report {
                 change: fmt_pct_change(act.avg_steps, pact.avg_steps),
             },
             Stat {
-                label: "Days ≥ 10,000 steps".into(),
+                label: "Days >= 10,000 steps".into(),
                 value: format!("{} / {}", act.days_10k, act.days_with_data),
                 change: None,
             },
@@ -515,10 +524,10 @@ pub fn build_report(store: &Store, period: Period, today: NaiveDate) -> Report {
     if let Some(ex) = act.exercise_min_per_week {
         if ex >= 150.0 {
             recs.push(rec(Category::Activity, Severity::Good, "Meeting the WHO exercise guideline",
-                format!("~{ex:.0} min of exercise per week (target ≥ 150 min). Add 2 strength sessions/week if you aren't already.")));
+                format!("~{ex:.0} min of exercise per week (target >= 150 min). Add 2 strength sessions/week if you aren't already.")));
         } else {
             recs.push(rec(Category::Activity, Severity::Info, "More structured exercise",
-                format!("~{ex:.0} min/week of logged exercise. WHO recommends ≥ 150 min of moderate activity (brisk walking counts) plus 2 strength sessions per week.")));
+                format!("~{ex:.0} min/week of logged exercise. WHO recommends >= 150 min of moderate activity (brisk walking counts) plus 2 strength sessions per week.")));
         }
     }
 
@@ -631,7 +640,7 @@ pub fn build_report(store: &Store, period: Period, today: NaiveDate) -> Report {
                 change: None,
             },
             Stat {
-                label: "SpO₂ average / lowest".into(),
+                label: "SpO2 average / lowest".into(),
                 value: format!("{} / {}", fmt_opt(hrt.spo2_avg, "%", 1), fmt_opt(hrt.spo2_min, "%", 0)),
                 change: None,
             },
@@ -647,10 +656,10 @@ pub fn build_report(store: &Store, period: Period, today: NaiveDate) -> Report {
         let d = cur - prev;
         if d >= 3.0 {
             recs.push(rec(Category::Heart, Severity::Warning, "Resting heart rate is up",
-                format!("Resting HR rose {d:.1} bpm vs the previous period ({prev:.0} → {cur:.0}). Common causes: poor sleep, stress, alcohol, illness or overtraining. Prioritise recovery for a few days.")));
+                format!("Resting HR rose {d:.1} bpm vs the previous period ({prev:.0} to {cur:.0}). Common causes: poor sleep, stress, alcohol, illness or overtraining. Prioritise recovery for a few days.")));
         } else if d <= -2.0 {
             recs.push(rec(Category::Heart, Severity::Good, "Resting heart rate improving",
-                format!("Resting HR dropped {:.1} bpm ({prev:.0} → {cur:.0}) – a typical sign of improving cardiovascular fitness.", -d)));
+                format!("Resting HR dropped {:.1} bpm ({prev:.0} to {cur:.0}) – a typical sign of improving cardiovascular fitness.", -d)));
         }
     }
     if let Some(r) = hrt.resting_hr {
@@ -672,10 +681,10 @@ pub fn build_report(store: &Store, period: Period, today: NaiveDate) -> Report {
     }
     if hrt.spo2_low_nights >= 2 {
         recs.push(rec(Category::Heart, Severity::Alert, "Repeated low blood-oxygen readings",
-            format!("SpO₂ dipped below 90 % on {} nights. Wrist sensors can be noisy, but if you snore, wake up tired or have morning headaches, ask a doctor about sleep-apnea screening.", hrt.spo2_low_nights)));
+            format!("SpO2 dipped below 90 % on {} nights. Wrist sensors can be noisy, but if you snore, wake up tired or have morning headaches, ask a doctor about sleep-apnea screening.", hrt.spo2_low_nights)));
     } else if hrt.spo2_avg.is_some_and(|v| v < 95.0) {
-        recs.push(rec(Category::Heart, Severity::Info, "SpO₂ slightly low",
-            "Your average overnight SpO₂ is below 95 %. Make sure the band fits snugly during sleep for accurate readings."));
+        recs.push(rec(Category::Heart, Severity::Info, "SpO2 slightly low",
+            "Your average overnight SpO2 is below 95 %. Make sure the band fits snugly during sleep for accurate readings."));
     }
 
     // ---- Body ----
@@ -799,7 +808,7 @@ pub fn build_report(store: &Store, period: Period, today: NaiveDate) -> Report {
         if let Some(bmr) = c.bmr_kcal {
             if let Some(active) = act.avg_active_kcal {
                 recs.push(rec(Category::Body, Severity::Info, "Your estimated energy needs",
-                    format!("BMR ≈ {bmr:.0} kcal + ~{active:.0} kcal activity ≈ {:.0} kcal/day to maintain weight.", bmr + active as f32)));
+                    format!("BMR ~{bmr:.0} kcal + ~{active:.0} kcal activity = ~{:.0} kcal/day to maintain weight.", bmr + active as f32)));
             }
         }
     }

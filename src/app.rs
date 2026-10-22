@@ -25,6 +25,7 @@ use crate::store::Store;
 // Palette & visual tokens (Warm Brown-to-Orange Modern Theme)
 // ---------------------------------------------------------------------------
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Icon {
     Home,
@@ -65,7 +66,7 @@ struct Palette {
 }
 
 impl Palette {
-    /// Warm espresso-brown to burnt-orange dark theme.
+    /// Warm espresso-brown to burnt-orange dark theme with distinct semantic insight colors.
     fn dark() -> Self {
         Self {
             bg: Color32::from_rgb(20, 14, 10),          // Deep espresso brown
@@ -75,14 +76,14 @@ impl Palette {
             text: Color32::from_rgb(252, 243, 234),     // Warm ivory cream
             muted: Color32::from_rgb(188, 156, 130),    // Sandy caramel muted text
             primary: Color32::from_rgb(249, 115, 22),   // Vibrant burnt orange
-            good: Color32::from_rgb(245, 158, 11),      // Warm golden amber
-            warn: Color32::from_rgb(251, 191, 36),      // Honey gold
-            alert: Color32::from_rgb(239, 83, 60),      // Terracotta red-orange
-            info: Color32::from_rgb(217, 119, 6),       // Copper amber
+            good: Color32::from_rgb(52, 211, 153),      // Emerald green (Good insight)
+            warn: Color32::from_rgb(251, 191, 36),      // Amber gold (Warning insight)
+            alert: Color32::from_rgb(248, 113, 113),    // Coral red (Alert insight)
+            info: Color32::from_rgb(96, 165, 250),      // Sky blue (Info insight)
         }
     }
 
-    /// Warm latte-cream to burnt-orange light theme.
+    /// Warm latte-cream to burnt-orange light theme with distinct semantic insight colors.
     fn light() -> Self {
         Self {
             bg: Color32::from_rgb(248, 240, 230),          // Warm sand / latte
@@ -92,10 +93,10 @@ impl Palette {
             text: Color32::from_rgb(44, 27, 16),           // Deep espresso text
             muted: Color32::from_rgb(128, 94, 68),         // Roasted coffee muted
             primary: Color32::from_rgb(234, 88, 12),       // Deep burnt orange
-            good: Color32::from_rgb(217, 119, 6),          // Rich amber
-            warn: Color32::from_rgb(180, 83, 9),           // Warm cinnamon
-            alert: Color32::from_rgb(220, 53, 34),         // Terracotta crimson
-            info: Color32::from_rgb(194, 65, 12),          // Copper orange
+            good: Color32::from_rgb(22, 163, 74),          // Forest green (Good insight)
+            warn: Color32::from_rgb(217, 119, 6),          // Rich amber (Warning insight)
+            alert: Color32::from_rgb(220, 38, 38),         // Crimson red (Alert insight)
+            info: Color32::from_rgb(37, 99, 235),          // Royal blue (Info insight)
         }
     }
 
@@ -214,11 +215,8 @@ impl Palette {
             .show(ui, |ui| {
                 ui.set_width(ui.available_width());
                 ui.horizontal(|ui| {
-                    let (icon_rect, _) =
-                        ui.allocate_exact_size(Vec2::new(16.0, 16.0), Sense::hover());
-                    Self::paint_icon(ui.painter(), Icon::Calendar, icon_rect.center(), 1.0, self.primary);
                     ui.label(
-                        RichText::new(date_label)
+                        RichText::new(format!("📅 {date_label}"))
                             .size(12.5)
                             .strong()
                             .color(self.muted),
@@ -236,6 +234,62 @@ impl Palette {
                     ui.label(RichText::new(details).size(12.0).color(self.text));
                 }
             });
+    }
+
+    /// Draws a crisp vector right-arrow (`->`) centered at `center`.
+    fn paint_arrow_right(painter: &egui::Painter, center: egui::Pos2, color: Color32) {
+        let stroke = Stroke::new(1.7_f32, color);
+        painter.line_segment(
+            [
+                egui::pos2(center.x - 5.5, center.y),
+                egui::pos2(center.x + 5.0, center.y),
+            ],
+            stroke,
+        );
+        painter.line_segment(
+            [
+                egui::pos2(center.x + 1.5, center.y - 3.5),
+                egui::pos2(center.x + 5.5, center.y),
+            ],
+            stroke,
+        );
+        painter.line_segment(
+            [
+                egui::pos2(center.x + 1.5, center.y + 3.5),
+                egui::pos2(center.x + 5.5, center.y),
+            ],
+            stroke,
+        );
+    }
+
+    /// Button with text followed by a crisp vector right-arrow icon.
+    fn arrow_link_button(self, ui: &mut Ui, label: &str) -> egui::Response {
+        let galley = ui.painter().layout_no_wrap(
+            label.to_string(),
+            FontId::proportional(13.5),
+            self.primary,
+        );
+        let size = Vec2::new(galley.size().x + 40.0, 36.0);
+        let (rect, resp) = ui.allocate_exact_size(size, Sense::click());
+        let bg = if resp.is_pointer_button_down_on() || resp.hovered() {
+            self.primary.gamma_multiply(0.22)
+        } else {
+            self.surface_alt
+        };
+        ui.painter().rect_filled(rect, Rounding::same(10.0), bg);
+        ui.painter().rect_stroke(
+            rect,
+            Rounding::same(10.0),
+            Stroke::new(1.0_f32, self.primary.gamma_multiply(0.5)),
+        );
+        let text_pos = egui::pos2(
+            rect.min.x + 12.0,
+            rect.center().y - galley.size().y * 0.5,
+        );
+        let arrow_center = egui::pos2(rect.max.x - 14.0, rect.center().y);
+        ui.painter().galley(text_pos, galley, self.primary);
+        Self::paint_arrow_right(ui.painter(), arrow_center, self.primary);
+        resp
     }
 
     /// Universal vector icon painter so all icons render sharply on Android without missing font glyphs.
@@ -725,21 +779,42 @@ impl Palette {
         };
         Frame::default()
             .fill(self.surface)
-            .stroke(Stroke::new(1.2_f32, accent.gamma_multiply(0.6)))
+            .stroke(Stroke::new(1.4_f32, accent.gamma_multiply(0.75)))
             .rounding(Rounding::same(14.0))
             .inner_margin(Margin::same(14.0))
             .show(ui, |ui| {
                 ui.set_width(ui.available_width());
                 ui.horizontal_wrapped(|ui| {
-                    let (icon_rect, _) =
-                        ui.allocate_exact_size(Vec2::new(16.0, 16.0), Sense::hover());
-                    Self::paint_icon(ui.painter(), icon, icon_rect.center(), 1.0, accent);
-                    ui.label(
-                        RichText::new(r.category.label())
-                            .size(12.5)
-                            .strong()
-                            .color(accent),
-                    );
+                    // Explicit color-coded severity badge pill (GOOD / INFO / WARNING / ALERT)
+                    Frame::default()
+                        .fill(accent.gamma_multiply(0.18))
+                        .stroke(Stroke::new(1.0_f32, accent.gamma_multiply(0.6)))
+                        .rounding(Rounding::same(8.0))
+                        .inner_margin(Margin::symmetric(8.0, 3.0))
+                        .show(ui, |ui| {
+                            ui.horizontal(|ui| {
+                                ui.spacing_mut().item_spacing.x = 5.0;
+                                let (icon_rect, _) =
+                                    ui.allocate_exact_size(Vec2::new(14.0, 14.0), Sense::hover());
+                                Self::paint_icon(
+                                    ui.painter(),
+                                    icon,
+                                    icon_rect.center(),
+                                    0.9,
+                                    accent,
+                                );
+                                ui.label(
+                                    RichText::new(format!(
+                                        "{} • {}",
+                                        r.severity.badge_label(),
+                                        r.category.label()
+                                    ))
+                                    .size(11.5)
+                                    .strong()
+                                    .color(accent),
+                                );
+                            });
+                        });
                     ui.label(
                         RichText::new(&r.title)
                             .size(15.5)
@@ -1076,15 +1151,16 @@ impl HealthHubApp {
 
             ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                 let settings_active = self.tab == Tab::Settings;
-                let settings_accent = if settings_active { Some(p.primary) } else { None };
-                if p.icon_button(ui, Icon::Settings, "Settings", settings_accent)
-                    .clicked()
-                {
+                let gear_txt = RichText::new("⚙ Settings")
+                    .size(13.5)
+                    .color(if settings_active { p.primary } else { p.text });
+                if ui.button(gear_txt).clicked() {
                     self.bridge.check_permissions();
                     self.tab = Tab::Settings;
                 }
 
-                if p.icon_button(ui, Icon::Sync, "Sync", None)
+                if ui
+                    .button(RichText::new("↻ Sync").size(13.5))
                     .on_hover_text("Sync Fitbit Air metrics from Health Connect")
                     .clicked()
                 {
@@ -1102,11 +1178,11 @@ impl HealthHubApp {
     fn ui_bottom_nav(&mut self, ui: &mut Ui) {
         let p = self.pal();
         let items = [
-            (Tab::Today, Icon::Home, "Today"),
-            (Tab::Activity, Icon::Activity, "Activity"),
-            (Tab::Sleep, Icon::Moon, "Sleep"),
-            (Tab::Body, Icon::Scale, "Scale"),
-            (Tab::Reports, Icon::Chart, "Reports"),
+            (Tab::Today, "🏠", "Today"),
+            (Tab::Activity, "♥", "Activity"),
+            (Tab::Sleep, "🌙", "Sleep"),
+            (Tab::Body, "⚖", "Scale"),
+            (Tab::Reports, "📊", "Reports"),
         ];
         let cols = items.len();
         let avail_w = ui.available_width();
@@ -1127,18 +1203,25 @@ impl HealthHubApp {
                         p.primary.gamma_multiply(0.18),
                     );
                 }
-                let icon_center = egui::pos2(rect.center().x, rect.min.y + 18.0);
-                Palette::paint_icon(ui.painter(), icon, icon_center, 1.15, fg);
-
+                let icon_galley = ui.painter().layout_no_wrap(
+                    icon.to_string(),
+                    FontId::proportional(20.0),
+                    fg,
+                );
                 let label_galley = ui.painter().layout_no_wrap(
                     label.to_string(),
                     FontId::proportional(13.0),
                     fg,
                 );
+                let icon_pos = egui::pos2(
+                    rect.center().x - icon_galley.size().x * 0.5,
+                    rect.min.y + 8.0,
+                );
                 let label_pos = egui::pos2(
                     rect.center().x - label_galley.size().x * 0.5,
-                    rect.min.y + 35.0,
+                    rect.min.y + 34.0,
                 );
+                ui.painter().galley(icon_pos, icon_galley, fg);
                 ui.painter().galley(label_pos, label_galley, fg);
 
                 if resp.clicked() {
@@ -1427,16 +1510,14 @@ impl HealthHubApp {
             for r in report.recommendations.iter().take(2) {
                 p.recommendation_card(ui, r);
             }
-            if ui
-                .button(
-                    RichText::new(format!(
-                        "See all {} insights in Reports →",
-                        report.recommendations.len()
-                    ))
-                    .size(13.5)
-                    .color(p.primary),
-                )
-                .clicked()
+            if p.arrow_link_button(
+                ui,
+                &format!(
+                    "See all {} insights in Reports",
+                    report.recommendations.len()
+                ),
+            )
+            .clicked()
             {
                 self.tab = Tab::Reports;
             }
@@ -2356,11 +2437,22 @@ impl HealthHubApp {
                     }
                 });
             });
-            ui.label(
-                RichText::new(format!("Period: {} → {}", report.start, report.end))
-                    .size(12.5)
-                    .color(p.muted),
-            );
+            ui.horizontal(|ui| {
+                ui.spacing_mut().item_spacing.x = 6.0;
+                ui.label(
+                    RichText::new(format!("Period: {}", report.start))
+                        .size(12.5)
+                        .color(p.muted),
+                );
+                let (arrow_rect, _) =
+                    ui.allocate_exact_size(Vec2::new(14.0, 14.0), Sense::hover());
+                Palette::paint_arrow_right(ui.painter(), arrow_rect.center(), p.primary);
+                ui.label(
+                    RichText::new(report.end.to_string())
+                        .size(12.5)
+                        .color(p.muted),
+                );
+            });
         });
 
         let report = self.get_report(self.report_period);
