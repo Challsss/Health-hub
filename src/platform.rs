@@ -153,6 +153,15 @@ impl PlatformBridge {
         }
     }
 
+    pub fn refresh_widgets(&self) {
+        #[cfg(target_os = "android")]
+        {
+            std::thread::spawn(|| {
+                let _ = android_impl::call_void("refreshWidgets");
+            });
+        }
+    }
+
     pub fn request_permissions(&self) {
         #[cfg(target_os = "android")]
         {

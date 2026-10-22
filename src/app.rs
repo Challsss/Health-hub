@@ -991,6 +991,8 @@ impl HealthHubApp {
         self.invalidate_report();
         if let Err(e) = self.store.save() {
             self.status_msg = format!("Save error: {e}");
+        } else {
+            self.bridge.refresh_widgets();
         }
     }
 

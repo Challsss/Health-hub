@@ -28,11 +28,25 @@ class MainActivity : NativeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         bleScanner = BleScaleScanner(this)
         super.onCreate(savedInstanceState)
+        HealthHubWidgetProvider.updateAllWidgets(this)
+    }
+
+    override fun onPause() {
+        HealthHubWidgetProvider.updateAllWidgets(this)
+        super.onPause()
     }
 
     override fun onDestroy() {
         bleScanner.stopScan()
+        HealthHubWidgetProvider.updateAllWidgets(this)
         super.onDestroy()
+    }
+
+    @Suppress("unused")
+    fun refreshWidgets() {
+        runOnUiThread {
+            HealthHubWidgetProvider.updateAllWidgets(this)
+        }
     }
 
     @Suppress("unused")

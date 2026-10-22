@@ -40,6 +40,8 @@
 
     <application
         android:label="Health Hub"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:hasCode="true">
 
         <activity
@@ -70,5 +72,17 @@
                 <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".HealthHubWidgetProvider"
+            android:label="Health Hub (4x2)"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/health_hub_widget_info" />
+        </receiver>
     </application>
 </manifest>
