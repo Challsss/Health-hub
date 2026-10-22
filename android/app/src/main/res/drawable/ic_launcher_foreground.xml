@@ -5,35 +5,8 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Outer rounded scale silhouette in rich copper-orange -->
+    <!-- Clean, bold burnt-orange heart centered in the adaptive icon safe zone -->
     <path
-        android:fillColor="#332217"
-        android:strokeColor="#F97316"
-        android:strokeWidth="3.2"
-        android:strokeLineJoin="round"
-        android:pathData="M37,29 L71,29 A8,8 0 0,1 79,37 L79,71 A8,8 0 0,1 71,79 L37,79 A8,8 0 0,1 29,71 L29,37 A8,8 0 0,1 37,29 Z" />
-
-    <!-- Top scale dial window in golden amber -->
-    <path
-        android:fillColor="#1A110B"
-        android:strokeColor="#F59E0B"
-        android:strokeWidth="2.2"
-        android:strokeLineJoin="round"
-        android:pathData="M45,35 L63,35 A3,3 0 0,1 66,38 L66,44 A3,3 0 0,1 63,47 L45,47 A3,3 0 0,1 42,44 L42,38 A3,3 0 0,1 45,35 Z" />
-
-    <!-- Dial indicator needle -->
-    <path
-        android:strokeColor="#F97316"
-        android:strokeWidth="2.4"
-        android:strokeLineCap="round"
-        android:pathData="M54,45 L58,38" />
-
-    <!-- Bold ECG Heartbeat Pulse wave across the lower half (Fitbit Air + Scale) -->
-    <path
-        android:fillColor="#00000000"
-        android:strokeColor="#FCF3EA"
-        android:strokeWidth="3.6"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M34,62 L44,62 L49,52 L55,71 L60,57 L64,62 L74,62" />
+        android:fillColor="#F97316"
+        android:pathData="M54,76 C54,76 30,60 30,43.5 C30,35.5 36.2,29.5 43.8,29.5 C48.2,29.5 52.1,31.7 54,35.2 C55.9,31.7 59.8,29.5 64.2,29.5 C71.8,29.5 78,35.5 78,43.5 C78,60 54,76 54,76 Z" />
 </vector>

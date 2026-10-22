@@ -20,7 +20,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="● HEALTH HUB"
+            android:singleLine="true"
+            android:text="♥ HEALTH HUB"
             android:textColor="#F97316"
             android:textSize="11.5sp"
             android:textStyle="bold" />
@@ -29,12 +30,13 @@
             android:id="@+id/widget_updated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tap to open →"
+            android:singleLine="true"
+            android:text="Tap to open"
             android:textColor="#BC9C82"
             android:textSize="11sp" />
     </LinearLayout>
 
-    <!-- Two-Column Main Metrics Row (4x2 layout) -->
+    <!-- Two-Column 4x2 Metrics Row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -42,7 +44,7 @@
         android:baselineAligned="false"
         android:orientation="horizontal">
 
-        <!-- Left Column: Google Fitbit Air -->
+        <!-- Left Panel -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -57,36 +59,38 @@
             android:paddingBottom="8dp">
 
             <TextView
+                android:id="@+id/widget_left_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FITBIT AIR"
+                android:singleLine="true"
+                android:text="STEPS"
                 android:textColor="#BC9C82"
                 android:textSize="10sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/widget_steps_val"
+                android:id="@+id/widget_left_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="true"
-                android:text="– steps"
+                android:text="–"
                 android:textColor="#FCF3EA"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/widget_fitbit_sub"
+                android:id="@+id/widget_left_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="true"
-                android:text="Sleep – • RHR –"
+                android:text="–"
                 android:textColor="#F59E0B"
                 android:textSize="11.5sp" />
         </LinearLayout>
 
-        <!-- Right Column: Xiaomi Scale S400 -->
+        <!-- Right Panel -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -101,31 +105,33 @@
             android:paddingBottom="8dp">
 
             <TextView
+                android:id="@+id/widget_right_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="XIAOMI S400"
+                android:singleLine="true"
+                android:text="HEART"
                 android:textColor="#BC9C82"
                 android:textSize="10sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/widget_weight_val"
+                android:id="@+id/widget_right_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="true"
-                android:text="– kg"
+                android:text="–"
                 android:textColor="#F97316"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/widget_scale_sub"
+                android:id="@+id/widget_right_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="true"
-                android:text="Fat –% • Visceral –"
+                android:text="–"
                 android:textColor="#FCF3EA"
                 android:textSize="11.5sp" />
         </LinearLayout>

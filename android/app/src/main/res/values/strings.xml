@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Health Hub</string>
-    <string name="widget_description">Fitbit Air daily steps, sleep &amp; RHR alongside Xiaomi S400 weight, body fat % &amp; visceral fat</string>
+    <string name="widget_description">Fitbit Air daily steps, distance, active calories, resting HR &amp; HRV (4x2)</string>
+    <string name="widget_sleep_description">Fitbit Air last sleep duration, bedtime &amp; sleep stages breakdown (4x2)</string>
+    <string name="widget_scale_description">Xiaomi Scale S400 last weigh-in: weight, body fat %, muscle mass &amp; visceral fat (4x2)</string>
 </resources>

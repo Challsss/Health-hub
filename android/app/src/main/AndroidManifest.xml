@@ -73,9 +73,10 @@
             </intent-filter>
         </activity>
 
+        <!-- Widget 1 (4x2): Steps & Heart -->
         <receiver
             android:name=".HealthHubWidgetProvider"
-            android:label="Health Hub (4x2)"
+            android:label="Health Hub • Steps &amp; Heart (4x2)"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -83,6 +84,32 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/health_hub_widget_info" />
+        </receiver>
+
+        <!-- Widget 2 (4x2): Last Sleep -->
+        <receiver
+            android:name=".SleepWidgetProvider"
+            android:label="Health Hub • Sleep (4x2)"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/sleep_widget_info" />
+        </receiver>
+
+        <!-- Widget 3 (4x2): Last Weigh-in (Xiaomi Scale S400) -->
+        <receiver
+            android:name=".ScaleWidgetProvider"
+            android:label="Health Hub • Xiaomi S400 Scale (4x2)"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/scale_widget_info" />
         </receiver>
     </application>
 </manifest>
